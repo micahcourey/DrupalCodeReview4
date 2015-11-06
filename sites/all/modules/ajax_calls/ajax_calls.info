@@ -1,0 +1,5 @@
+name = Ajax Calls
+description = handle the ajax calls and load the content into the div.
+package = Micah's Modules
+core = 7.x
+files[] = ajax_calls.module
