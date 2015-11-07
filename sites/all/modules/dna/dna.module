@@ -1,0 +1,81 @@
+<?php
+
+function dna_menu() {
+  $items['dna'] = array(
+    'title' => 'DNA Module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dna_form'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['dna_success_page'] = array(
+    'title' => 'Your DNA molecule:',
+    'page callback' => 'dna_success',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function dna_form() {
+  $form['dna_input'] = array(
+    '#title' => 'Enter the first sequence of your DNA',
+    '#type' => 'textfield',
+    '#description' => t('Enter the 4 characters of your of the first sequence of your DNA (any combonation of A, T, C, and G)'),
+    '#element_validate' => array('element_validate_dna'),
+    '#required' => TRUE,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Generate DNA',
+  );
+  return $form;
+}
+
+function generate_dna($dna) {
+
+  $dna = strtoupper($dna);
+  $dna = str_replace(' ', '', $dna);
+  $dna_array = str_split($dna, 1);
+  $opposite_dna = [];
+  foreach($dna_array as $nucleotide) {
+    if ($nucleotide == 'A') {
+      array_push($opposite_dna, 'T');
+    } else if ($nucleotide == 'T') {
+      array_push($opposite_dna, 'A');
+    } else if ($nucleotide == 'C') {
+      array_push($opposite_dna, 'G');
+    } else if ($nucleotide == 'G') {
+      array_push($opposite_dna, 'C');
+    }
+  }
+
+  $result = implode(" ", $opposite_dna);
+  return $result;
+}
+
+
+
+function element_validate_dna($element) {
+    $input = strtoupper($element['#value']);
+    $input = str_replace(' ', '', $input);
+    $input_array = str_split($input, 1);
+    $dna_array = ['A', 'T', 'C', 'G'];
+    foreach($input_array as $input_letter) {
+      if (!in_array($input_letter, $dna_array)) {
+        form_error($element, t($input_letter . ' is not a DNA nucleotide. nucleotides include A, T, C, G.'));
+      };
+    }
+}
+
+function dna_form_submit($form, &$form_state) {
+  $output_sequence = $form_state['values']['dna_input'];
+  $_SESSION['sequence_output'] = $output_sequence;
+  $form_state['redirect'] = 'dna_success_page';
+}
+function dna_success() {
+  $result = $_SESSION['sequence_output'];
+  return $result;
+}
