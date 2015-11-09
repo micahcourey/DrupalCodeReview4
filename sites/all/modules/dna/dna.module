@@ -2,24 +2,25 @@
 
 function dna_menu() {
   $items['dna'] = array(
-    'title' => 'DNA Module',
+    'title' => 'DNA Generator',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('dna_form'),
     'access callback' => TRUE,
     'type' => MENU_NORMAL_ITEM,
   );
 
-  $items['dna_success_page'] = array(
-    'title' => 'Your DNA molecule:',
+  $items['dna_success'] = array(
+    'title' => 'DNA results',
     'page callback' => 'dna_success',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
+
   return $items;
 }
 
 function dna_form() {
-  $form['dna_input'] = array(
+  $form['input'] = array(
     '#title' => 'Enter the first sequence of your DNA',
     '#type' => 'textfield',
     '#description' => t('Enter the 4 characters of your of the first sequence of your DNA (any combonation of A, T, C, and G)'),
@@ -31,51 +32,55 @@ function dna_form() {
     '#type' => 'submit',
     '#value' => 'Generate DNA',
   );
+
   return $form;
 }
 
-function generate_dna($dna) {
+function element_validate_dna($element) {
+  $input = strtoupper($element['#value']);
+  $input_array = str_split($input);
+  $dna_array = array('A', 'T', 'C', 'G');
 
-  $dna = strtoupper($dna);
-  $dna = str_replace(' ', '', $dna);
-  $dna_array = str_split($dna, 1);
-  $opposite_dna = [];
-  foreach($dna_array as $nucleotide) {
-    if ($nucleotide == 'A') {
-      array_push($opposite_dna, 'T');
-    } else if ($nucleotide == 'T') {
-      array_push($opposite_dna, 'A');
-    } else if ($nucleotide == 'C') {
-      array_push($opposite_dna, 'G');
-    } else if ($nucleotide == 'G') {
-      array_push($opposite_dna, 'C');
+  foreach ($input_array as $input) {
+    if (!in_array($input, $dna_array)) {
+    form_error($element, t($input . ' is not a DNA nucleotide. nucleotides include A, T, C, G.'));
     }
   }
-
-  $result = implode(" ", $opposite_dna);
-  return $result;
 }
 
-
-
-function element_validate_dna($element) {
-    $input = strtoupper($element['#value']);
-    $input = str_replace(' ', '', $input);
-    $input_array = str_split($input, 1);
-    $dna_array = ['A', 'T', 'C', 'G'];
-    foreach($input_array as $input_letter) {
-      if (!in_array($input_letter, $dna_array)) {
-        form_error($element, t($input_letter . ' is not a DNA nucleotide. nucleotides include A, T, C, G.'));
-      };
+function generate_dna($dna) {
+  $dna = strtoupper($dna);
+  $nucleotides = str_split($dna);
+  $opposite_nucleotide = '';
+  $opposite_dna = [];
+  foreach ($nucleotides as $nucleotide) {
+    if ($nucleotide === 'A') {
+      $opposite_nucleotide = 'T';
+      array_push($opposite_dna, $opposite_nucleotide);
+    } elseif ($nucleotide === 'T') {
+      $opposite_nucleotide = 'A';
+      array_push($opposite_dna, $opposite_nucleotide);
+    } elseif ($nucleotide === 'C') {
+      $opposite_nucleotide = 'G';
+      array_push($opposite_dna, $opposite_nucleotide);
+    } elseif ($nucleotide === 'G') {
+      $opposite_nucleotide = 'C';
+      array_push($opposite_dna, $opposite_nucleotide);
     }
+  }
+  return implode($opposite_dna);
 }
 
 function dna_form_submit($form, &$form_state) {
-  $output_sequence = $form_state['values']['dna_input'];
-  $_SESSION['sequence_output'] = $output_sequence;
-  $form_state['redirect'] = 'dna_success_page';
+  $input = $form_state['values']['input'];
+  $result = generate_dna($input);
+  $_SESSION['input'] = $input;
+  $_SESSION['result'] = $result;
+
+  $form_state['redirect'] = 'dna_success';
 }
+
 function dna_success() {
-  $result = $_SESSION['sequence_output'];
-  return $result;
+  $result = $_SESSION['result'];
+  return '<p>The other half of your DNA sequence is ' . $result . '</p>';
 }

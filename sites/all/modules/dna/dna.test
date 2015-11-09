@@ -1,0 +1,51 @@
+<?php
+
+class DNATestCase extends DrupalUnitTestCase {
+  public static function getInfo() {
+    return array(
+      'name'        => 'DNA Generator Unit Tests',
+      'description' => 'Test that DNA Generator generates opposite nucleotides properly',
+      'group'       => 'Micahs Tests',
+    );
+  }
+
+  function testDNACompleter() {
+    $description = 'Converts a single letter to its opposite.';
+    $input = 'A';
+    $result = dna_input($input);
+    $expected_output = 'T';
+    $this->assertEqual($result, $expected_output, $description);
+
+    $description = 'Converts 2 letters to their opposites.';
+    $input = 'AC';
+    $result = dna_input($input);
+    $expected_output = 'TG';
+    $this->assertEqual($result, $expected_output, $description);
+
+    $description = 'Converts all 4 letters to their opposites.';
+    $input = 'ACTG';
+    $result = dna_input($input);
+    $expected_output = 'TGAC';
+    $this->assertEqual($result, $expected_output, $description);
+  }
+}
+
+class DNATests extends DrupalWebTestCase {
+  public static function getInfo() {
+    return array(
+      'name'        => 'DNA Generator Unit Tests',
+      'description' => 'Test that DNA Generator generates opposite nucleotides properly',
+      'group'       => 'Micahs Tests',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('dna'));
+  }
+
+  public function testDisplay() {
+    $info['sequence'] = "ATCG";
+    $this->drupalPost('dna', $info, t("Testing"));
+    $this->assertText("TAGC", "Tests Passed");
+  }
+}

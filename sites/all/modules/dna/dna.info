@@ -1,5 +1,7 @@
 name = DNA Generator
-description = A custom module which presents a form where the user can enter in one half of their DNA helix.
+description =  A custom module which presents a form where the user can enter in one half of their DNA helix.
 package = Micah's Modules
 core = 7.x
 files[] = dna.module
+files[] = dna.test
+dependencies[] = simpletest
