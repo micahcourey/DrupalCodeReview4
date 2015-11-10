@@ -14,8 +14,8 @@ $ git clone https://github.com/micahcourey/DrupalCodeReview4.git
 * Start server inside project folder
 * Import database from sites/database folder
 * Database username: dna password: epicodus
+* Drupal site username: dna password: epicodus
 * go to the localhost address in your browser
-* Enjoy!
 
 Site Users
 * username: dna password: epicodus
