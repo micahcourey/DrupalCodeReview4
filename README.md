@@ -3,7 +3,7 @@ Drupan Code Review 4
 
 By Micah Courey, 6-Nov-2015
 
-A Drupal website showcasing a custom module called DNA
+A Drupal website showcasing a custom module called DNA, A custom Zen sub-theme and a Ajax enabled article generator.
 
 Setup
 ----------

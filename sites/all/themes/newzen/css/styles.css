@@ -22,21 +22,77 @@
 /* @import "theme-A.css"; */
 /* @import "theme-B.css"; */
 
+html {
+  background: url(https://upload.wikimedia.org/wikipedia/commons/0/05/DNA_Helix_CPK.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 body {
-  margin: 0;
-  padding: 0;
-  background: #E1F2FE;
   font-family: 'Ubuntu', sans-serif;
+  width: 100%;
+  color: #fff;
+}
+
+p {
+  font-size: 1.3em;
+}
+
+.submitted {
+  color: #fff;
+}
+
+#block-block-2 {
+  color: #fff;
+  text-align: center;
+}
+
+.field-item {
+  text-align: center;
+}
+
+.field-item, .form-item {
+padding: 1%;
+margin: 10px;
+background-color: #fff;
+opacity:0.6;
+filter:alpha(opacity=60);
+border-radius: 5px;
+color: #000;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.active {
+  color: #fff;
+  text-decoration: none;
+}
+
+input {
+  border-radius: 4px;
+  background-color: #AA0906;
+}
+
+#edit-name {
+  background-color: #AA0906;
 }
 
 .nav {
-  background-color: #102542;
+  background-color: #AA0906;
   width: 100%;
   color: #fff;
   position: fixed;
   left: 0;
   right: 0;
+}
 
+.menu-219 {
+  margin-left: 40px;
 }
 
 #main {
